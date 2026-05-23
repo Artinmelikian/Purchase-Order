@@ -30,10 +30,10 @@ Single-page app with three tabs managed in `App.jsx`: **Նոր Հայտ** (creat
 **Data flow:**
 1. `POForm` → inserts into `purchase_orders` (status `pending`) + `po_items`
 2. `PendingOrders` → lists pending orders; clicking opens `OrderPreviewModal` which fetches items and shows full details; footer has two actions:
-   - **Խmbagrел (Edit)** → opens `EditOrderModal` which updates the order and replaces all `po_items` in place (status stays `pending`)
-   - **Hastatел (Confirm)** → opens `PasswordModal`
-3. `PasswordModal` → compares input against `VITE_CONFIRM_PASSWORD`; on success updates order to `status='confirmed'`
-4. `ConfirmedOrders` → lists confirmed/downloaded orders; download renders `PODocument` into a hidden off-screen div, captures it with `html2canvas` → `jsPDF` (A4 JPEG), then increments `download_count` and sets `status='downloaded'`
+   - **Edit** → opens `EditOrderModal` which updates the order and replaces all `po_items` in place (status stays `pending`)
+   - **Confirm** → opens `PasswordModal`
+3. `PasswordModal` → no `<form>` tag (prevents Chrome save-password prompt); compares input against `VITE_CONFIRM_PASSWORD`; on success updates order to `status='confirmed'`
+4. `ConfirmedOrders` → clicking an order opens `OrderPreviewModal` in `readOnly` mode (no edit/confirm buttons); separate Download button renders `PODocument` into a hidden off-screen div, captures with `html2canvas` → `jsPDF` (A4 JPEG), increments `download_count`, sets `status='downloaded'`
 
 **PDF generation** (`src/utils/pdfExport.js`): uses `html2canvas` with `allowTaint: true` + JPEG encoding (not PNG — jsPDF has PNG corruption issues with cross-origin images). Content taller than A4 is sliced across pages manually.
 

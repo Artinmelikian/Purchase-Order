@@ -60,7 +60,7 @@ export const T = {
   BTN_EDIT:         "Խմբագրել",
   BTN_SUBMIT:       "Ուղարկել Հաստատման",
   BTN_CONFIRM:      "Հաստատել",
-  BTN_CANCEL:       "Դուրս",
+  BTN_CANCEL:       "Դուրս գալ",
   BTN_DOWNLOAD:     "Բեռնել PDF",
   BTN_REFRESH:      "↻ Թարմացնել",
   BTN_PREPARING:    "Պատրաստվում...",
