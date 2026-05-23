@@ -155,15 +155,13 @@ export default function PODocument({ order, items }) {
         <div style={{
           border: '1px solid #555', padding: '10px 14px',
           display: 'flex', justifyContent: 'space-between',
-          alignItems: 'flex-end', minHeight: '72px',
+          alignItems: 'flex-start', minHeight: '72px',
         }}>
           <div>
-            <div style={{ fontWeight: 'bold', marginBottom: '26px' }}>{T.CONFIRM_HDR}</div>
-            <div>{T.SIGNED_BY}</div>
+            <div style={{ fontWeight: 'bold' }}>{T.CONFIRM_HDR}</div>
           </div>
           <div style={{ textAlign: 'right' }}>
-            <div style={{ fontWeight: 'bold', marginBottom: '6px' }}>{T.DIRECTOR_LABEL}</div>
-            <div style={{ height: '44px' }} />
+            <div style={{ fontWeight: 'bold', marginBottom: '4px' }}>{T.DIRECTOR_LABEL}</div>
             <div>{T.DIRECTOR_NAME}</div>
             <div style={{ marginTop: '4px', width: '130px', borderBottom: '1px solid #333', marginLeft: 'auto' }} />
           </div>
