@@ -4,7 +4,7 @@ export const T = {
   APP_TITLE:        "Պատվերի Հայտ",
   TAB_CREATE:       "Նոր Հայտ",
   TAB_PENDING:      "Ակտիվ Հայտեր",
-  TAB_CONFIRMED:    "Հաստատված",
+  TAB_CONFIRMED:    "Հաստատված հայտեր",
   PROCUREMENT_SUB:  "Ձևումներ / Procurement",
 
   // Form header
@@ -57,7 +57,7 @@ export const T = {
   DIRECTOR_NAME:    "Մարինե Պետրոսյան",
 
   // Buttons & actions
-  BTN_SUBMIT:       "Հաստատման Ուղարկել",
+  BTN_SUBMIT:       "Ուղարկել Հաստատման",
   BTN_CONFIRM:      "Հաստատել",
   BTN_CANCEL:       "Դուրս",
   BTN_DOWNLOAD:     "Բեռնել PDF",

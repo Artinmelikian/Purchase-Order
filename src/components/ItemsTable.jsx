@@ -54,7 +54,7 @@ export default function ItemsTable({ items, onChange, readOnly = false, showErro
               <td className={cellCls}>
                 {readOnly
                   ? <span className="px-1 text-sm">{item.quantity}</span>
-                  : <input type="text" value={item.quantity} onChange={e => updateItem(index, 'quantity', e.target.value)} className={reqInputCls(item.quantity)} />}
+                  : <input type="number" min="0" value={item.quantity} onChange={e => updateItem(index, 'quantity', e.target.value)} className={reqInputCls(item.quantity)} />}
               </td>
               {!readOnly && (
                 <td className={cellCls + ' text-center'}>

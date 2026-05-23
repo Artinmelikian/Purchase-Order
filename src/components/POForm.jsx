@@ -11,8 +11,6 @@ export default function POForm({ onSubmitted }) {
   const [responsible, setResponsible] = useState('')
   const [purpose, setPurpose] = useState('')
   const [notes, setNotes] = useState('')
-  const [sigFile, setSigFile] = useState(null)
-  const [sigPreview, setSigPreview] = useState(null)
   const [items, setItems] = useState([{ ...EMPTY_ITEM }])
   const [submitting, setSubmitting] = useState(false)
   const [success, setSuccess] = useState(false)
@@ -38,13 +36,6 @@ export default function POForm({ onSubmitted }) {
     fetchNextPO()
   }, [])
 
-  function handleSigChange(e) {
-    const file = e.target.files[0]
-    if (!file) return
-    setSigFile(file)
-    setSigPreview(URL.createObjectURL(file))
-  }
-
   async function handleSubmit(e) {
     e.preventDefault()
     setError('')
@@ -66,17 +57,6 @@ export default function POForm({ onSubmitted }) {
     setSubmitting(true)
     try {
       const orderId = crypto.randomUUID()
-      let respSigUrl = null
-      if (sigFile) {
-        const ext = sigFile.name.split('.').pop()
-        const path = `responsible/${orderId}.${ext}`
-        const { error: uploadErr } = await supabase.storage
-          .from('signatures')
-          .upload(path, sigFile, { contentType: sigFile.type })
-        if (uploadErr) throw uploadErr
-        const { data: urlData } = supabase.storage.from('signatures').getPublicUrl(path)
-        respSigUrl = urlData.publicUrl
-      }
       const { error: insertErr } = await supabase.from('purchase_orders').insert({
         id: orderId,
         po_number: poNumber,
@@ -84,7 +64,6 @@ export default function POForm({ onSubmitted }) {
         responsible: responsible.trim(),
         purpose: purpose.trim(),
         notes: notes.trim() || null,
-        resp_sig_url: respSigUrl,
         status: 'pending',
       })
       if (insertErr) throw insertErr
@@ -101,7 +80,6 @@ export default function POForm({ onSubmitted }) {
       if (itemsErr) throw itemsErr
       setSuccess(true)
       setDepartment(''); setResponsible(''); setPurpose(''); setNotes('')
-      setSigFile(null); setSigPreview(null)
       setItems([{ ...EMPTY_ITEM }])
       setItemsSubmitted(false)
       setPoNumber(String(parseInt(poNumber, 10) + 1).padStart(3, '0'))
@@ -157,29 +135,11 @@ export default function POForm({ onSubmitted }) {
             required className={inputCls} placeholder={T.PH_DEPT} />
         </div>
 
-        {/* Responsible + Signature */}
+        {/* Responsible */}
         <div>
           <label className={labelCls}>{T.RESP_LABEL} *</label>
-          <div className="flex gap-3 items-start">
-            <div className="flex-1">
-              <input value={responsible} onChange={e => setResponsible(e.target.value)}
-                required className={inputCls} placeholder={T.PH_RESP} />
-            </div>
-            <div>
-              <label className="block text-xs text-gray-500 mb-1">{T.SIG_LABEL}</label>
-              <label className="cursor-pointer flex items-center gap-2 border border-dashed border-gray-300 rounded px-3 py-2 text-xs text-gray-500 hover:border-blue-400 hover:text-blue-600 transition">
-                <span>📎 {T.SIG_ATTACH}</span>
-                <input type="file" accept="image/*" className="hidden" onChange={handleSigChange} />
-              </label>
-              {sigPreview && (
-                <div className="mt-1 relative inline-block">
-                  <img src={sigPreview} alt="sig" className="h-10 object-contain border rounded" />
-                  <button type="button" onClick={() => { setSigFile(null); setSigPreview(null) }}
-                    className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-4 h-4 text-xs flex items-center justify-center">×</button>
-                </div>
-              )}
-            </div>
-          </div>
+          <input value={responsible} onChange={e => setResponsible(e.target.value)}
+            required className={inputCls} placeholder={T.PH_RESP} />
         </div>
 
         {/* Purpose */}
