@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    font-family: 'Arial', 'Helvetica Neue', Helvetica, sans-serif;
+  }
+  body {
+    @apply bg-gray-50 text-gray-900;
+  }
+}
+
+/* PDF / Print document styles */
+.po-document {
+  width: 210mm;
+  min-height: 297mm;
+  background: white;
+  font-size: 11px;
+  font-family: 'Arial', 'Helvetica Neue', Helvetica, sans-serif;
+  color: #111;
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+  body * {
+    visibility: hidden;
+  }
+  .po-document, .po-document * {
+    visibility: visible;
+  }
+  .po-document {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 210mm;
+    margin: 0;
+  }
+}
+
+/* Shake animation for wrong password */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(6px); }
+}
+.shake {
+  animation: shake 0.4s ease-in-out;
+}
