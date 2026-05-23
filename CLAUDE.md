@@ -48,10 +48,7 @@ Tables: `purchase_orders`, `po_items` (see `supabase-setup.sql`).
 RLS is **disabled** on both tables — anon key has full access.  
 Storage bucket `signatures` must be set to **public**.
 
-After running `supabase-setup.sql`, also run:
-```sql
-ALTER TABLE purchase_orders ADD COLUMN IF NOT EXISTS director_sig_url TEXT;
-```
+Run `supabase-setup.sql` to create both tables and disable RLS.
 
 ## Deployment
 
