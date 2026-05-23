@@ -73,7 +73,7 @@ export const T = {
   STATUS_DOWNLOADED:"Բեռնված",
 
   // Messages
-  MSG_NO_PENDING:   "Ակտիվ հայտեր չկա",
+  MSG_NO_PENDING:   "Ակտիվ հայտեր չկան",
   MSG_NO_CONFIRMED: "Հաստատված հայտեր չկա",
   MSG_SUCCESS:      "Հայտն ուղարկվել է հաստատման!",
   MSG_WRONG_PASS:   "Գաղտնաբառը սխալ է։ Կրկնեք նորից։",
