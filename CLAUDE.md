@@ -25,11 +25,13 @@ VITE_CONFIRM_PASSWORD=...
 
 ## Architecture
 
-Single-page app with three tabs managed in `App.jsx`: **Նոր Հայտ** (create), **Ակտիվ Հայտեր** (pending approval), **Հաստատված** (confirmed + download).
+Single-page app with three tabs managed in `App.jsx`: **Նոր Հայտ** (create), **Ակտիվ Հայտեր** (pending approval), **Հաստատված հայտեր** (confirmed + download).
 
 **Data flow:**
-1. `POForm` → inserts into `purchase_orders` (status `pending`) + `po_items`, optionally uploads responsible person's signature to Supabase Storage bucket `signatures/responsible/{uuid}.ext`
-2. `PendingOrders` → lists pending orders; clicking opens `OrderPreviewModal` which fetches items and shows full details; the **Հաստատել** button inside opens `PasswordModal`
+1. `POForm` → inserts into `purchase_orders` (status `pending`) + `po_items`
+2. `PendingOrders` → lists pending orders; clicking opens `OrderPreviewModal` which fetches items and shows full details; footer has two actions:
+   - **Խmbagrел (Edit)** → opens `EditOrderModal` which updates the order and replaces all `po_items` in place (status stays `pending`)
+   - **Hastatел (Confirm)** → opens `PasswordModal`
 3. `PasswordModal` → compares input against `VITE_CONFIRM_PASSWORD`; on success updates order to `status='confirmed'`
 4. `ConfirmedOrders` → lists confirmed/downloaded orders; download renders `PODocument` into a hidden off-screen div, captures it with `html2canvas` → `jsPDF` (A4 JPEG), then increments `download_count` and sets `status='downloaded'`
 
@@ -39,8 +41,7 @@ Single-page app with three tabs managed in `App.jsx`: **Նոր Հայտ** (creat
 
 **Static assets in `public/`:**
 - `aregai-header.png` — full-width dark header banner used in both app UI and PDF
-- `aregai-logo.png` — standalone logo (legacy, header image is now preferred)
-- `director-sig.jpg` — hardcoded director signature; appears in the PDF beside the responsible person's name
+- `director-sig.jpg` — hardcoded director signature; always rendered in the PDF beside the responsible person's name (not uploaded per order)
 
 ## Database
 

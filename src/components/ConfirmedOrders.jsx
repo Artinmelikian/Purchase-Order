@@ -3,11 +3,13 @@ import { supabase, isConfigured } from '../lib/supabase'
 import { T } from '../constants'
 import { exportToPDF } from '../utils/pdfExport'
 import PODocument from './PODocument'
+import OrderPreviewModal from './OrderPreviewModal'
 
 export default function ConfirmedOrders() {
   const [orders, setOrders] = useState([])
   const [loading, setLoading] = useState(true)
   const [downloadingId, setDownloadingId] = useState(null)
+  const [previewOrder, setPreviewOrder] = useState(null)
   const [pdfOrder, setPdfOrder] = useState(null)
   const [pdfItems, setPdfItems] = useState([])
   const pdfRef = useRef(null)
@@ -79,7 +81,7 @@ export default function ConfirmedOrders() {
       ) : (
         <div className="space-y-3">
           {orders.map(order => (
-            <div key={order.id} className="bg-white border border-gray-200 rounded-xl p-4">
+            <div key={order.id} onClick={() => setPreviewOrder(order)} className="bg-white border border-gray-200 rounded-xl p-4 cursor-pointer hover:border-blue-300 hover:shadow-sm transition">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex items-center gap-3 min-w-0">
                   <div className="w-10 h-10 bg-green-50 border border-green-200 rounded-lg flex items-center justify-center text-sm font-bold text-green-700 shrink-0">
@@ -99,7 +101,7 @@ export default function ConfirmedOrders() {
                       ? `${T.STATUS_DOWNLOADED}${order.download_count > 1 ? ` (×${order.download_count})` : ''}`
                       : T.STATUS_CONFIRMED}
                   </span>
-                  <button onClick={() => handleDownload(order)} disabled={downloadingId === order.id}
+                  <button onClick={e => { e.stopPropagation(); handleDownload(order) }} disabled={downloadingId === order.id}
                     className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition">
                     {downloadingId === order.id ? <>⏳ {T.BTN_PREPARING}</> : <>⬇ {T.BTN_DOWNLOAD}</>}
                   </button>
@@ -113,6 +115,15 @@ export default function ConfirmedOrders() {
             </div>
           ))}
         </div>
+      )}
+
+      {/* Order preview */}
+      {previewOrder && (
+        <OrderPreviewModal
+          order={previewOrder}
+          onCancel={() => setPreviewOrder(null)}
+          readOnly
+        />
       )}
 
       {/* Hidden PDF render area */}

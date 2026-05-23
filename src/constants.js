@@ -57,6 +57,7 @@ export const T = {
   DIRECTOR_NAME:    "Մարինե Պետրոսյան",
 
   // Buttons & actions
+  BTN_EDIT:         "Խմբագրել",
   BTN_SUBMIT:       "Ուղարկել Հաստատման",
   BTN_CONFIRM:      "Հաստատել",
   BTN_CANCEL:       "Դուրս",

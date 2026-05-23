@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 import { T } from '../constants'
 import PasswordModal from './PasswordModal'
+import EditOrderModal from './EditOrderModal'
 
-export default function OrderPreviewModal({ order, onSuccess, onCancel }) {
+export default function OrderPreviewModal({ order, onSuccess, onCancel, readOnly = false }) {
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(true)
   const [showPassword, setShowPassword] = useState(false)
+  const [showEdit, setShowEdit] = useState(false)
 
   useEffect(() => {
     async function fetchItems() {
@@ -109,10 +111,18 @@ export default function OrderPreviewModal({ order, onSuccess, onCancel }) {
               className="flex-1 border border-gray-300 rounded-lg py-2 text-sm text-gray-600 hover:bg-gray-50 transition">
               {T.BTN_CANCEL}
             </button>
-            <button onClick={() => setShowPassword(true)}
-              className="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg py-2 text-sm transition">
-              {T.BTN_CONFIRM} →
-            </button>
+            {!readOnly && (
+              <>
+                <button onClick={() => setShowEdit(true)}
+                  className="flex-1 border border-blue-400 text-blue-600 hover:bg-blue-50 font-semibold rounded-lg py-2 text-sm transition">
+                  ✏️ {T.BTN_EDIT}
+                </button>
+                <button onClick={() => setShowPassword(true)}
+                  className="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg py-2 text-sm transition">
+                  {T.BTN_CONFIRM} →
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -122,6 +132,14 @@ export default function OrderPreviewModal({ order, onSuccess, onCancel }) {
           order={order}
           onSuccess={onSuccess}
           onCancel={() => setShowPassword(false)}
+        />
+      )}
+
+      {showEdit && (
+        <EditOrderModal
+          order={order}
+          onSaved={onCancel}
+          onCancel={() => setShowEdit(false)}
         />
       )}
     </>

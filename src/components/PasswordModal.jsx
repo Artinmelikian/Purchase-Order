@@ -7,8 +7,7 @@ export default function PasswordModal({ order, onSuccess, onCancel }) {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
-  async function handleConfirm(e) {
-    e.preventDefault()
+  async function handleConfirm() {
     setError('')
     const correct = import.meta.env.VITE_CONFIRM_PASSWORD
     if (password !== correct) {
@@ -22,10 +21,14 @@ export default function PasswordModal({ order, onSuccess, onCancel }) {
     try {
       await onSuccess(order.id)
     } catch (err) {
-      setError('Սխալ: ' + (err.message || 'Անհայտ'))
+      setError('Սխալ: ' + (err.message || 'Անhayт'))
     } finally {
       setLoading(false)
     }
+  }
+
+  function handleKeyDown(e) {
+    if (e.key === 'Enter' && password && !loading) handleConfirm()
   }
 
   return (
@@ -35,16 +38,18 @@ export default function PasswordModal({ order, onSuccess, onCancel }) {
         <p className="text-sm text-gray-500 mb-4">
           {T.FORM_TITLE} <strong>#{order.po_number}</strong> — {order.department}
         </p>
-        <form onSubmit={handleConfirm} className="space-y-4">
+        <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">{T.PWD_LABEL}</label>
             <input
               type="password"
               value={password}
               onChange={e => setPassword(e.target.value)}
-              autoFocus required
+              onKeyDown={handleKeyDown}
+              autoComplete="new-password"
+              autoFocus
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
-              placeholder={T.PWD_PLACEHOLDER || '••••••••'}
+              placeholder="••••••••"
             />
           </div>
 
@@ -56,12 +61,12 @@ export default function PasswordModal({ order, onSuccess, onCancel }) {
               className="flex-1 border border-gray-300 rounded-lg py-2 text-sm text-gray-600 hover:bg-gray-50 transition">
               {T.BTN_CANCEL}
             </button>
-            <button type="submit" disabled={loading || !password}
+            <button type="button" onClick={handleConfirm} disabled={loading || !password}
               className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-green-300 text-white font-semibold rounded-lg py-2 text-sm transition">
               {loading ? T.BTN_LOADING : T.BTN_CONFIRM}
             </button>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   )
