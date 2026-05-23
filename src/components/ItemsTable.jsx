@@ -24,12 +24,12 @@ export default function ItemsTable({ items, onChange, readOnly = false, showErro
       <table className="w-full border-collapse text-sm">
         <thead>
           <tr className="bg-gray-100">
-            <th className={cellCls + ' text-center w-10'}>{T.TH_NN}</th>
-            <th className={cellCls + ' text-center w-24'}>{T.TH_CODE}</th>
-            <th className={cellCls + ' text-center'}>{T.TH_NAME} <span className="text-red-500">*</span></th>
-            <th className={cellCls + ' text-center w-20'}>{T.TH_UNIT} <span className="text-red-500">*</span></th>
-            <th className={cellCls + ' text-center w-20'}>{T.TH_QTY} <span className="text-red-500">*</span></th>
-            {!readOnly && <th className={cellCls + ' text-center w-10'}></th>}
+            <th className={cellCls + ' text-center w-8'}>{T.TH_NN}</th>
+            <th className={cellCls + ' text-center w-20'}>{T.TH_CODE}</th>
+            <th className={cellCls + ' text-center w-2/5'}>{T.TH_NAME} <span className="text-red-500">*</span></th>
+            <th className={cellCls + ' text-center w-16'}>{T.TH_UNIT} <span className="text-red-500">*</span></th>
+            <th className={cellCls + ' text-center w-16'}>{T.TH_QTY} <span className="text-red-500">*</span></th>
+            {!readOnly && <th className={cellCls + ' text-center w-8'}></th>}
           </tr>
         </thead>
         <tbody>
