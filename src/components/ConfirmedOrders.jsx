@@ -10,6 +10,7 @@ export default function ConfirmedOrders() {
   const [loading, setLoading] = useState(true)
   const [downloadingId, setDownloadingId] = useState(null)
   const [previewOrder, setPreviewOrder] = useState(null)
+  const [confirmPaidId, setConfirmPaidId] = useState(null)
   const [pdfOrder, setPdfOrder] = useState(null)
   const [pdfItems, setPdfItems] = useState([])
   const pdfRef = useRef(null)
@@ -28,12 +29,12 @@ export default function ConfirmedOrders() {
 
   useEffect(() => { fetchOrders() }, [fetchOrders])
 
-  async function handleMarkPaid(e, orderId) {
-    e.stopPropagation()
+  async function handleMarkPaid() {
     const { error } = await supabase
       .from('purchase_orders')
       .update({ payment_status: 'paid' })
-      .eq('id', orderId)
+      .eq('id', confirmPaidId)
+    setConfirmPaidId(null)
     if (!error) await fetchOrders()
   }
 
@@ -128,7 +129,7 @@ export default function ConfirmedOrders() {
                   </div>
                   <div className="flex gap-1.5">
                     {order.payment_status !== 'paid' && (
-                      <button onClick={e => handleMarkPaid(e, order.id)}
+                      <button onClick={e => { e.stopPropagation(); setConfirmPaidId(order.id) }}
                         className="flex items-center gap-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition">
                         💳 {T.BTN_MARK_PAID}
                       </button>
@@ -147,6 +148,26 @@ export default function ConfirmedOrders() {
               )}
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Confirm paid modal */}
+      {confirmPaidId && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-sm p-6">
+            <div className="text-2xl text-center mb-3">💳</div>
+            <p className="text-center text-gray-800 font-medium mb-6">{T.CONFIRM_PAID_MSG}</p>
+            <div className="flex gap-3">
+              <button onClick={() => setConfirmPaidId(null)}
+                className="flex-1 border border-gray-300 rounded-lg py-2 text-sm text-gray-600 hover:bg-gray-50 transition">
+                {T.BTN_CANCEL}
+              </button>
+              <button onClick={handleMarkPaid}
+                className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg py-2 text-sm transition">
+                {T.BTN_MARK_PAID}
+              </button>
+            </div>
+          </div>
         </div>
       )}
 

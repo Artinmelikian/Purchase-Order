@@ -102,6 +102,7 @@ export const T = {
 
   // Password modal
   PWD_TITLE:        "Հաստատում",
-  PWD_DELETE_TITLE: "Ջնջել հայտը",
+  PWD_DELETE_TITLE: "Ջնջել հայտը"
+  CONFIRM_PAID_MSG: "Այս պատվերը վճարվա՞ծ է։",
   PWD_LABEL:        "Գաղտնաբառ",
 }
