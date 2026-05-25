@@ -119,13 +119,11 @@ export default function ConfirmedOrders() {
                         ? `${T.STATUS_DOWNLOADED}${order.download_count > 1 ? ` (×${order.download_count})` : ''}`
                         : T.STATUS_CONFIRMED}
                     </span>
-                    <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                      order.payment_status === 'paid'
-                        ? 'bg-emerald-100 text-emerald-700'
-                        : 'bg-orange-100 text-orange-700'
-                    }`}>
-                      {order.payment_status === 'paid' ? T.STATUS_PAID : T.STATUS_PAYMENT_PENDING}
-                    </span>
+                    {order.payment_status === 'paid' && (
+                      <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700">
+                        {T.STATUS_PAID}
+                      </span>
+                    )}
                   </div>
                   <div className="flex gap-1.5">
                     {order.payment_status !== 'paid' && (
