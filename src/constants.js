@@ -72,6 +72,9 @@ export const T = {
   STATUS_PENDING:   "Ակտիվ",
   STATUS_CONFIRMED: "Հաստատված",
   STATUS_DOWNLOADED:"Բեռնված",
+  STATUS_PAYMENT_PENDING: "Վչարոմ սպասվոմ",
+  STATUS_PAID:     "Վչարվալ",
+  BTN_MARK_PAID:   "Վչարվալ ✓",
 
   // Messages
   MSG_NO_PENDING:   "Ակտիվ հայտեր չկան",

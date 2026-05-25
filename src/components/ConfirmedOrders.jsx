@@ -28,6 +28,15 @@ export default function ConfirmedOrders() {
 
   useEffect(() => { fetchOrders() }, [fetchOrders])
 
+  async function handleMarkPaid(e, orderId) {
+    e.stopPropagation()
+    const { error } = await supabase
+      .from('purchase_orders')
+      .update({ payment_status: 'paid' })
+      .eq('id', orderId)
+    if (!error) await fetchOrders()
+  }
+
   async function handleDelete(orderId) {
     const { error } = await supabase.from('purchase_orders').delete().eq('id', orderId)
     if (error) throw error
@@ -101,17 +110,34 @@ export default function ConfirmedOrders() {
                   </div>
                 </div>
                 <div className="flex flex-col items-end gap-2 shrink-0">
-                  <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                    order.status === 'downloaded' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'
-                  }`}>
-                    {order.status === 'downloaded'
-                      ? `${T.STATUS_DOWNLOADED}${order.download_count > 1 ? ` (×${order.download_count})` : ''}`
-                      : T.STATUS_CONFIRMED}
-                  </span>
-                  <button onClick={e => { e.stopPropagation(); handleDownload(order) }} disabled={downloadingId === order.id}
-                    className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition">
-                    {downloadingId === order.id ? <>⏳ {T.BTN_PREPARING}</> : <>⬇ {T.BTN_DOWNLOAD}</>}
-                  </button>
+                  <div className="flex gap-1.5 flex-wrap justify-end">
+                    <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
+                      order.status === 'downloaded' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'
+                    }`}>
+                      {order.status === 'downloaded'
+                        ? `${T.STATUS_DOWNLOADED}${order.download_count > 1 ? ` (×${order.download_count})` : ''}`
+                        : T.STATUS_CONFIRMED}
+                    </span>
+                    <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
+                      order.payment_status === 'paid'
+                        ? 'bg-emerald-100 text-emerald-700'
+                        : 'bg-orange-100 text-orange-700'
+                    }`}>
+                      {order.payment_status === 'paid' ? T.STATUS_PAID : T.STATUS_PAYMENT_PENDING}
+                    </span>
+                  </div>
+                  <div className="flex gap-1.5">
+                    {order.payment_status !== 'paid' && (
+                      <button onClick={e => handleMarkPaid(e, order.id)}
+                        className="flex items-center gap-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition">
+                        💳 {T.BTN_MARK_PAID}
+                      </button>
+                    )}
+                    <button onClick={e => { e.stopPropagation(); handleDownload(order) }} disabled={downloadingId === order.id}
+                      className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition">
+                      {downloadingId === order.id ? <>⏳ {T.BTN_PREPARING}</> : <>⬇ {T.BTN_DOWNLOAD}</>}
+                    </button>
+                  </div>
                 </div>
               </div>
               {order.purpose && (
