@@ -4,10 +4,11 @@ import { T } from '../constants'
 import PasswordModal from './PasswordModal'
 import EditOrderModal from './EditOrderModal'
 
-export default function OrderPreviewModal({ order, onSuccess, onCancel, readOnly = false }) {
+export default function OrderPreviewModal({ order, onSuccess, onCancel, onDelete, readOnly = false }) {
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(true)
   const [showPassword, setShowPassword] = useState(false)
+  const [showDeletePassword, setShowDeletePassword] = useState(false)
   const [showEdit, setShowEdit] = useState(false)
 
   useEffect(() => {
@@ -111,6 +112,10 @@ export default function OrderPreviewModal({ order, onSuccess, onCancel, readOnly
               className="flex-1 border border-gray-300 rounded-lg py-2 text-sm text-gray-600 hover:bg-gray-50 transition">
               {T.BTN_CANCEL}
             </button>
+            <button onClick={() => setShowDeletePassword(true)}
+              className="flex-1 border border-red-400 text-red-600 hover:bg-red-50 font-semibold rounded-lg py-2 text-sm transition">
+              🗑 {T.BTN_DELETE}
+            </button>
             {!readOnly && (
               <>
                 <button onClick={() => setShowEdit(true)}
@@ -132,6 +137,15 @@ export default function OrderPreviewModal({ order, onSuccess, onCancel, readOnly
           order={order}
           onSuccess={onSuccess}
           onCancel={() => setShowPassword(false)}
+        />
+      )}
+
+      {showDeletePassword && (
+        <PasswordModal
+          order={order}
+          onSuccess={onDelete}
+          onCancel={() => setShowDeletePassword(false)}
+          deleteMode
         />
       )}
 

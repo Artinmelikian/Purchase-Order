@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { T } from '../constants'
 
-export default function PasswordModal({ order, onSuccess, onCancel }) {
+export default function PasswordModal({ order, onSuccess, onCancel, deleteMode = false }) {
   const [password, setPassword] = useState('')
   const [shake, setShake] = useState(false)
   const [error, setError] = useState('')
@@ -34,7 +34,9 @@ export default function PasswordModal({ order, onSuccess, onCancel }) {
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className={`bg-white rounded-xl shadow-2xl w-full max-w-sm p-6 ${shake ? 'shake' : ''}`}>
-        <h2 className="text-lg font-bold text-gray-800 mb-1">{T.PWD_TITLE}</h2>
+        <h2 className={`text-lg font-bold mb-1 ${deleteMode ? 'text-red-700' : 'text-gray-800'}`}>
+          {deleteMode ? T.PWD_DELETE_TITLE : T.PWD_TITLE}
+        </h2>
         <p className="text-sm text-gray-500 mb-4">
           {T.FORM_TITLE} <strong>#{order.po_number}</strong> — {order.department}
         </p>
@@ -62,8 +64,11 @@ export default function PasswordModal({ order, onSuccess, onCancel }) {
               {T.BTN_CANCEL}
             </button>
             <button type="button" onClick={handleConfirm} disabled={loading || !password}
-              className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-green-300 text-white font-semibold rounded-lg py-2 text-sm transition">
-              {loading ? T.BTN_LOADING : T.BTN_CONFIRM}
+              className={`flex-1 ${deleteMode
+                ? 'bg-red-600 hover:bg-red-700 disabled:bg-red-300'
+                : 'bg-green-600 hover:bg-green-700 disabled:bg-green-300'
+              } text-white font-semibold rounded-lg py-2 text-sm transition`}>
+              {loading ? T.BTN_LOADING : deleteMode ? T.BTN_DELETE : T.BTN_CONFIRM}
             </button>
           </div>
         </div>

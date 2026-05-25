@@ -61,6 +61,7 @@ export const T = {
   BTN_SUBMIT:       "Ուղարկել Հաստատման",
   BTN_CONFIRM:      "Հաստատել",
   BTN_CANCEL:       "Դուրս գալ",
+  BTN_DELETE:       "Ջնջել",
   BTN_DOWNLOAD:     "Բեռնել PDF",
   BTN_REFRESH:      "↻ Թարմացնել",
   BTN_PREPARING:    "Պատրաստվում...",
@@ -98,5 +99,6 @@ export const T = {
 
   // Password modal
   PWD_TITLE:        "Հաստատում",
+  PWD_DELETE_TITLE: "Ջնջել հայտը",
   PWD_LABEL:        "Գաղտնաբառ",
 }

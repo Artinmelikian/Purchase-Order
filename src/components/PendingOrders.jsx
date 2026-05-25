@@ -22,6 +22,13 @@ export default function PendingOrders() {
 
   useEffect(() => { fetchOrders() }, [fetchOrders])
 
+  async function handleDelete(orderId) {
+    const { error } = await supabase.from('purchase_orders').delete().eq('id', orderId)
+    if (error) throw error
+    setSelectedOrder(null)
+    await fetchOrders()
+  }
+
   async function handleConfirm(orderId) {
     const { error } = await supabase
       .from('purchase_orders')
@@ -91,7 +98,7 @@ export default function PendingOrders() {
       )}
 
       {selectedOrder && (
-        <OrderPreviewModal order={selectedOrder} onSuccess={handleConfirm} onCancel={() => setSelectedOrder(null)} />
+        <OrderPreviewModal order={selectedOrder} onSuccess={handleConfirm} onDelete={handleDelete} onCancel={() => setSelectedOrder(null)} />
       )}
     </div>
   )

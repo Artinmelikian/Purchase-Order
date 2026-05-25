@@ -28,6 +28,13 @@ export default function ConfirmedOrders() {
 
   useEffect(() => { fetchOrders() }, [fetchOrders])
 
+  async function handleDelete(orderId) {
+    const { error } = await supabase.from('purchase_orders').delete().eq('id', orderId)
+    if (error) throw error
+    setPreviewOrder(null)
+    await fetchOrders()
+  }
+
   async function handleDownload(order) {
     setDownloadingId(order.id)
     try {
@@ -122,6 +129,7 @@ export default function ConfirmedOrders() {
         <OrderPreviewModal
           order={previewOrder}
           onCancel={() => setPreviewOrder(null)}
+          onDelete={handleDelete}
           readOnly
         />
       )}
